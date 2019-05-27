@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>大事件-后台登录页</title>
+    <link rel="stylesheet" type="text/css" href="css/reset.css">
+    <link rel="stylesheet" type="text/css" href="css/iconfont.css">
+    <link rel="stylesheet" type="text/css" href="css/main.css">
+    <link rel="stylesheet" href="./js/bootstrap/css/bootstrap.min.css">
+
+</head>
+
+<body>
+    <div class="main_wrap">
+        <div class="header">
+            <a href="#" class="logo"><img src="images/logo.png" alt=""></a>
+            <div class="copyright">CopyRight © 2019 深圳百秀信息技术股份有限公司<br>All Rights Reserved</div>
+        </div>
+
+        <div class="login_form_con">
+            <div class="login_title"></div>
+            <form class="login_form">
+                <i class="iconfont icon-user"></i>
+                <i class="iconfont icon-key"></i>
+                <input type="text" class="input_txt" placeholder="邮箱/手机号">
+                <input type="password" class="input_pass" placeholder="密码">
+                <input type="submit" class="input_sub" value="登 录" data-toggle="modal" data-target="#myModal">
+            </form>
+        </div>
+
+    </div>
+
+    <!-- 模态框 -->
+    <div class="modal fade" tabindex="-1" role="dialog" id="myModal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">提示信息</h4>
+                </div>
+                <div class="modal-body">
+                    <p></p>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+
+    <script src="./js/jquery-1.12.4.min.js"></script>
+    <script src="./js/bootstrap/js/bootstrap.min.js"></script>
+    <script>
+        $(function () {
+            // 取出表单的默认事件
+            $('form').submit(function (e) {
+                e.preventDefault();
+            })
+
+            $('.input_sub').click(function () {
+                // 用H5新增的方法判断输入框的值是否为空
+                var user_name = $('.input_txt').val().trim();
+                var password = $('.input_pass').val().trim();
+                if (user_name != '' && password != '') {
+                    // 将用户名和密码发送到后台,通过返回的响应数据判断是否正确
+                    $.ajax({
+                        type: 'post',
+                        url: 'http://localhost:8000/admin/login',
+                        data: {
+                            user_name: user_name,
+                            password: password
+                        },
+                        success: function (response) {
+                            if (response.code == 200) {
+                                // 跳转到首页
+                                window.location.href = './index.html';
+                            } else {
+                                // 提示: 用户名或密码登录错误
+                                $('.modal-body p').text('用户名或密码错误');
+                            }
+                        }
+                    })
+                } else {
+                    // 提示: 用户名或密码不能为空
+                    $('.modal-body p').text('用户名或密码不能为空');
+
+                }
+            })
+
+        })
+    </script>
+</body>
+
+</html>
